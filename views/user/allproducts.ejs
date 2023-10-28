@@ -1,0 +1,111 @@
+<%- include('../user/layout/user-header.ejs') -%>
+
+
+<div class="container-fluid">
+
+
+    <h4 class="section-title position-relative text-uppercase mb-3 ml-5"><span class="bg-secondary pr-3">All products 
+      </span></h4>
+      <h6 class="ml-5"><%= productCount %> - ITEMS</h6>
+
+
+  </div>
+
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+
+
+            <% totalproducts.forEach(function(totalproducts){ %>
+                <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+                    <div class="product-item bg-light mb-4">
+                        <div class="product-img position-relative overflow-hidden">
+                            <a href="/product-page/<%= totalproducts._id %>"><img class="img-fluid w-100"
+                                    src='/images/product/<%= totalproducts.Image[0] %>' alt=""></a>
+                            <div class="product-action">
+
+
+                                <a onclick="addToWishlist('<%= totalproducts._id %>','<%=totalproducts.productName %>')"
+                                    class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
+                                <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
+                                <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+                            </div>
+                        </div>
+                        <div class="text-center py-4">
+                            <a class="h6 text-decoration-none text-truncate"
+                                href="/product-page/<%= totalproducts._id %>">
+                                <%= totalproducts.productName %>
+                            </a>
+                            <div class="d-flex align-items-center justify-content-center mt-2">
+                                <h5>₹ <%= totalproducts.price %>
+                                </h5>
+                                <h6 class="text-muted ml-2">
+                                    <!-- <del>$123.00</del> -->
+                                    <h5> <span class="bg-secondary pr-3 align-items-center rounded">
+                                            <%= totalproducts.size %>
+                                        </span></h5>
+                                </h6>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-center mt-2">
+                                <h5>
+                                    <%= totalproducts.description %>
+                                </h5>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-center mb-1">
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small>(99)</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <% }) %>
+        </div>
+           <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <% if(currentPage==1){ %>
+                    <li class="page-item disabled">
+                        <a class="page-link" href="" tabindex="-1">Previous</a>
+                      </li>
+                <% } else{ %>
+                    <li class="page-item ">
+                        <a class="page-link" href="/shopping/?page=<%=currentPage-1 %>" tabindex="-1">Previous</a>
+                      </li>
+                <% } %>
+
+              
+              <%for(let i =1; i<=pages; i++){ %>
+
+                <% if(i==currentPage){ %>
+                    <li class="page-item active"><a class="page-link" href="/shopView/?page=<%= i %>"><%= i %></a></li>
+                <% } else{ %>
+                    <li class="page-item"><a class="page-link" href="/shopping/?page=<%= i %>"><%= i %></a></li>
+                <% } %>
+
+              
+              <% } %>
+
+
+              <% if(pages==currentPage){ %>
+                <li class="page-item disabled">
+                    <a class="page-link disabled" >Next</a>
+                  </li>
+            <% } else{ %>
+                <li class="page-item">
+                    <a class="page-link" href="/shopping/?page=<%=currentPage+1 %>">Next</a>
+                  </li>
+            <% } %>
+
+
+              
+            </ul>
+          </nav>
+    </div>
+    <!-- Shop Product End -->
+    
+
+
+
+    <%- include('../user/layout/user-footer.ejs') -%>
