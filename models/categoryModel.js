@@ -8,6 +8,10 @@ const categorySchema = new schema({
         required: true, 
         unique: true  
     },
+    Image: {
+        type: String, 
+        required: true, 
+    },
 }, 
 {timestamps: true}
 ) 

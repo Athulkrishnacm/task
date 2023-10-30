@@ -1,0 +1,77 @@
+<%-include('../admin/layout/admin-header-layout.ejs') -%>
+
+    <div class="col-lg">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">Add Banner</div>
+                <hr>
+                <form action="/admin/addbanner" method="post" enctype="multipart/form-data">
+
+                    <div class="form-group">
+                        <label for="input-4">Banner Text</label>
+                        <input class="form-control" id="input-4" type="text" required name="banner">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="input-5" style="color: #000;">Banner Image</label>
+                        <input type="file" class="form-control" id="input-5" name="Image"
+                            placeholder="Choose an image" />
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success px-5"> Add Banner</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+
+
+        <div class="card">
+            <div class="card-body ">
+                <div style="display: flex; justify-content: space-between;">
+                    <h5 class="card-title">Banners</h5>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Banner Text</th>
+                                <th scope="col">Image</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% banners.forEach((banner,index)=> { %>
+                                <tr class="justify-content-center align-items-center">
+                                    <td>
+                                        <%= index +1 %>
+                                    </td>
+                                    <td>
+                                        <%= banner.banner %>
+                                    </td>
+                                    <td><img src='/images/banner/<%= banner.Image %>' alt="" class="bt-0"
+                                            style="height: 200px; width: 355px;"></td>
+                                    <td>
+                                        <form action="/admin/deletebanner/<%= banner._id %>" method="get">
+                                            <button type="submit" class="btn  btn-danger 	fa fa-trash"
+                                                style="width: 75px; height: 30px;"
+                                                onclick="return confirm('Are you sure you want to delete ?')">
+                                                <p placeholder="Delete"></p>
+                                            </button>
+                                        </form>
+                                    </td>
+
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
+            <%-include('../admin/layout/admin-footer-layout') -%>

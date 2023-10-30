@@ -1,6 +1,7 @@
 const UserModel = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
+
 const ProductModel = require("../models/productModel");
 const categoryModel = require("../models/categoryModel");
 const sizeModel = require("../models/sizeModel");
@@ -9,6 +10,10 @@ const orderModel = require("../models/orderModel");
 const wishlistModel = require("../models/wishlistModel");
 const addressModel = require("../models/addressModel");
 const couponModel = require("../models/couponModel");
+const bannerModel = require("../models/bannerModel");
+const brandModel = require("../models/brandModel");
+const readWorkbook = require("../utils/workbook");
+
 const user = require("../middleware/auth");
 const crypto = require("crypto");
 const { default: mongoose } = require("mongoose");
@@ -22,7 +27,7 @@ var instance = new Razorpay({
 //----------------------------------------- START OTP ----------------------------------------------------------
 // Email OTP Verification
 
-var UserName;
+var UserName;readWorkbook
 var Email;
 var Phone;
 var Password;
@@ -53,6 +58,7 @@ module.exports = {
   home: async (req, res) => {
     try {
       const allCategory = await categoryModel.find();
+      const banners = await bannerModel.find()
       const todayDeal = await ProductModel.find({ description: "SPECIAL DEAL" });
       if (req.session.userLogin) {
         const user = req.session.user;
@@ -70,6 +76,7 @@ module.exports = {
           var listCount = 0;
         }
         res.render("user/home-page", {
+          banners,
           user,
           cartCount,
           listCount,
@@ -77,7 +84,7 @@ module.exports = {
           todayDeal,
         });
       } else {
-        res.render("user/home-page", { user: false, allCategory, todayDeal });
+        res.render("user/home-page", { user: false, allCategory, todayDeal, banners });
       }
     } catch {
       res.redirect('/error');
@@ -599,12 +606,18 @@ module.exports = {
       const allCategory = await categoryModel.find();
       const id = req.params.id;
       const totalproducts = await ProductModel.findById({ _id: id });
-
+      // update here
+      const brands = await brandModel.find();
+      const data = await readWorkbook('public/sheets/samsung.xlsx');
+      const models =await data.map((row) => row[1])
+      models.shift()
+      // const models = []
       if (req.session.userLogin) {
         const user = req.session.user;
         const userId = user._id;
         const userCart = await cartModel.findOne({ userId: userId });
         const userList = await wishlistModel.findOne({ userId: userId });
+
         if (userCart) {
           var cartCount = userCart.products.length;
         } else {
@@ -616,6 +629,8 @@ module.exports = {
           var listCount = 0;
         }
         res.render("user/product-page", {
+          brands,
+          models,
           totalproducts,
           user,
           cartCount,
@@ -624,12 +639,15 @@ module.exports = {
         });
       } else {
         res.render("user/product-page", {
+          brands,
+          models,
           totalproducts,
           user: false,
           allCategory,
         });
       }
-    } catch {
+    } catch(error) {
+      console.log("🚀 ~ file: userController.js:649 ~ productpage: ~ error:", error)
       res.redirect('/error')
     }
   },
@@ -949,6 +967,8 @@ module.exports = {
       paymentMethod: req.body.payment,
       totalProduct: count,
       totalAmount: Total,
+      orderType: req.body.orderType,
+      customImage: req.body.customImage,
       orderStatus: "Placed",
     };
 
@@ -1076,7 +1096,7 @@ module.exports = {
       .find({ userId: userId })
       .populate("items.productId")
       .sort({ createdAt: -1 });
-      console.log(orders)
+    console.log(orders)
 
     if (orders) {
       res.render("user/orders", {
@@ -1252,7 +1272,7 @@ module.exports = {
 
       if (req.session.userLogin) {
         const orderId = req.params.id;
-        console.log(orderId,'orderIdorderIdorderId');
+        console.log(orderId, 'orderIdorderIdorderId');
         const user = req.session.user;
         const userId = user._id;
         const userCart = await cartModel.findOne({ userId: userId });
@@ -1270,8 +1290,8 @@ module.exports = {
         const orders = await orderModel
           .find({ _id: orderId })
           .populate("items.productId");
-          console.log(orders,'ordersordersorders');
-         
+        console.log(orders, 'ordersordersorders');
+
         if (orders) {
           res.render("user/view-Order", {
             user,

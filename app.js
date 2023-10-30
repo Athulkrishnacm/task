@@ -6,7 +6,7 @@ const ejs=require('ejs');
 const cookieParser=require('cookie-parser');
 const session = require('express-session');
 const multer = require('multer');
-
+require('dotenv').config()
 
 
 

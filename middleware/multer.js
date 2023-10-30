@@ -16,13 +16,27 @@ const upload = multer({
   fileFilter: multerFilter
 });
 
-const uploadFiles = upload.array("Image",4);
- 
-const uploadImages = (req, res, next) => { 
+const uploadFiles = upload.array("Image", 4);
+const uploadFile = upload.single("Image");
+
+const uploadImages = (req, res, next) => {
   uploadFiles(req, res, err => {
     if (err instanceof multer.MulterError) {
       if (err.code === "LIMIT_UNEXPECTED_FILE") {
-        return res.send("Too many files to upload."); 
+        return res.send("Too many files to upload.");
+      }
+    } else if (err) {
+      return res.send(err);
+    }
+
+    next();
+  });
+};
+const uploadImage = (req, res, next) => {
+  uploadFile(req, res, err => {
+    if (err instanceof multer.MulterError) {
+      if (err.code === "LIMIT_UNEXPECTED_FILE") {
+        return res.send("Too many files to upload.");
       }
     } else if (err) {
       return res.send(err);
@@ -46,7 +60,7 @@ const resizeImages = async (req, res, next) => {
         .toFormat("jpeg")
         .jpeg({ quality: 90 })
         .toFile(`./public/images/product/${newFilename}`);
-        console.log(newFilename);
+      console.log(newFilename);
       req.body.images.push(newFilename);
     })
   );
@@ -54,7 +68,61 @@ const resizeImages = async (req, res, next) => {
   next();
 };
 
+
+const resizeCategoryImage = async (req, res, next) => {
+  if (!req.file) return next();
+  const file = req.file
+  const filename = file.originalname.replace(/\..+$/, "");
+  const newFilename = `${file.fieldname}-${Date.now()}-${Math.random()}.jpeg`;
+
+  await sharp(file.buffer)
+    .resize(300, 400)
+    .toFormat("jpeg")
+    .jpeg({ quality: 90 })
+    .toFile(`./public/images/category/${newFilename}`);
+  console.log(newFilename);
+  req.body.image = newFilename
+
+
+
+  next();
+};
+const resizeBannerImage = async (req, res, next) => {
+  if (!req.file) return next();
+  const file = req.file
+  const filename = file.originalname.replace(/\..+$/, "");
+  const newFilename = `${file.fieldname}-${Date.now()}-${Math.random()}.jpeg`;
+
+  await sharp(file.buffer)
+    .resize(768, 1024)
+    .toFormat("jpeg")
+    .jpeg({ quality: 90 })
+    .toFile(`./public/images/banner/${newFilename}`);
+  console.log(newFilename);
+  req.body.image = newFilename
+  next();
+};
+const resizeCustomImage = async (req, res, next) => {
+  if (!req.file) return next();
+  const file = req.file
+  const filename = file.originalname.replace(/\..+$/, "");
+  const newFilename = `${file.fieldname}-${Date.now()}-${Math.random()}.jpeg`;
+
+  await sharp(file.buffer)
+    .toFormat("jpeg")
+    .jpeg({ quality: 100 })
+    .toFile(`./public/images/custom/${newFilename}`);
+  console.log(newFilename);
+  req.body.image = newFilename
+  next();
+};
+
 module.exports = {
   uploadImages: uploadImages,
-  resizeImages: resizeImages
+  resizeImages: resizeImages,
+  uploadImage: uploadImage,
+  resizeCategoryImage: resizeCategoryImage,
+  resizeBannerImage: resizeBannerImage,
+  resizeCustomImage: resizeCustomImage
+
 };

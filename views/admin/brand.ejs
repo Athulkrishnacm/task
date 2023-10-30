@@ -1,0 +1,86 @@
+<%-include('../admin/layout/admin-header-layout.ejs') -%>
+
+    <div class="col-lg">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">Add brand</div>
+                <hr>
+                <form action="/admin/addbrand" method="post">
+
+                    <div class="form-group">
+                        <label for="input-4">Brand name</label>
+                        <input class="form-control" id="input-4" type="text" required name="brand">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="input-4">Brand sheet</label>
+                        <input class="form-control" id="input-4" type="text" required name="sheet">
+                    </div>
+
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success px-5"> Add brand</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+
+
+        <div class="card">
+            <div class="card-body ">
+                <div style="display: flex; justify-content: space-between;">
+                    <h5 class="card-title">Brands</h5>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">brand Text</th>
+                                <th scope="col">Available Models</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% brands.forEach((brand,index)=> { %>
+                                <tr class="justify-content-center align-items-center">
+                                    <td>
+                                        <%= index +1 %>
+                                    </td>
+                                    <td>
+                                        <%= brand.brand %>
+                                    </td>
+                                   
+                                    <td>
+                                        <div class="selectOptionBoxisNewDesign">
+                                            <select name="brand" id="brand">
+                                                <% models.forEach((model,index)=> { %>
+                                                    <option class="device--options" value="<%= model %>">
+                                                        <%= model %>
+                                                    </option>
+                                                    <% }) %>
+                                            </select>
+                                        </div>
+                                    <td>
+                                        <form action="/admin/deletebrand/<%= brand._id %>" method="get">
+                                            <button type="submit" class="btn  btn-danger 	fa fa-trash"
+                                                style="width: 75px; height: 30px;"
+                                                onclick="return confirm('Are you sure you want to delete ?')">
+                                                <p placeholder="Delete"></p>
+                                            </button>
+                                        </form>
+                                    </td>
+
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
+            <%-include('../admin/layout/admin-footer-layout') -%>
