@@ -2,6 +2,7 @@ const AdminModel = require("../models/adminModel");
 const UserModel = require("../models/userModel");
 const ProductModel = require("../models/productModel");
 const categoryModel = require("../models/categoryModel");
+const settingsModel = require("../models/settingsModel");
 const sizeModel = require("../models/sizeModel");
 const coupon = require("../models/couponModel")
 const bcrypt = require("bcrypt");
@@ -540,5 +541,20 @@ module.exports = {
 
         res.render("admin/salesReport", { orders, total, number: req.query.no });
     },
-
+    processdays: async (req, res) => {
+        try {
+            const days = await settingsModel.find().select('processDays')
+            res.render('admin/processdays', { days })
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    updateProcessDays: async (req, res) => {
+        try {
+            const days = await settingsModel.findByIdAndUpdate(req.params.id , { processDays:req.body.days  })
+            res.render('admin/renderdays', { days })
+        } catch (error) {
+            console.log(error);
+        }
+    },
 };

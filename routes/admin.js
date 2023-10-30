@@ -35,6 +35,7 @@ router.get('/viewDetails/:id', adminSession.adminSession, controller.viewDetails
 router.get('/saleReport', adminSession.adminSession, controller.saleReport)
 router.get('/delete_coupon', adminSession.adminSession, controller.deleteCoupon)
 router.get('/dash', adminSession.adminSession, controller.dashboard)
+router.get('/processdays', adminSession.adminSession, controller.processdays)
 // search
 
 // user
@@ -62,6 +63,7 @@ router.post('/addbanner', multer.uploadImage, multer.resizeBannerImage, controll
 router.post('/addbrand', controller.addbrand)
 router.post('/addsize', controller.addsize)
 router.post('/addCoupon', controller.postAddCoupon)
+router.post('/processdays', controller.updateProcessDays)
 router.post('/status_change', controller.statusChange)
 
 router.post("/addproduct", multer.uploadImages, multer.resizeImages, controller.addproduct)

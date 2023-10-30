@@ -27,7 +27,7 @@ var instance = new Razorpay({
 //----------------------------------------- START OTP ----------------------------------------------------------
 // Email OTP Verification
 
-var UserName;readWorkbook
+var UserName; readWorkbook
 var Email;
 var Phone;
 var Password;
@@ -609,7 +609,7 @@ module.exports = {
       // update here
       const brands = await brandModel.find();
       const data = await readWorkbook('public/sheets/samsung.xlsx');
-      const models =await data.map((row) => row[1])
+      const models = await data.map((row) => row[1])
       models.shift()
       // const models = []
       if (req.session.userLogin) {
@@ -646,8 +646,7 @@ module.exports = {
           allCategory,
         });
       }
-    } catch(error) {
-      console.log("🚀 ~ file: userController.js:649 ~ productpage: ~ error:", error)
+    } catch (error) {
       res.redirect('/error')
     }
   },
@@ -950,6 +949,7 @@ module.exports = {
       .populate("products.productId");
     const product = cartProducts.products;
     let count = cartProducts.products.length;
+
     let Total = cartProducts.cartTotal;
     const userOrder = {
       Address: {
@@ -967,6 +967,9 @@ module.exports = {
       paymentMethod: req.body.payment,
       totalProduct: count,
       totalAmount: Total,
+      categoryName: req.body.category,
+      brand: req.body.category,
+      picture: req.body.picture,
       orderType: req.body.orderType,
       customImage: req.body.customImage,
       orderStatus: "Placed",

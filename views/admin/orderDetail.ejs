@@ -144,6 +144,23 @@
               </h6>
             </div>
             <div class="d-flex justify-content-between">
+              <h6>Category :</h6>
+              <h6>
+                <%= orders.category%>
+              </h6>
+            </div>
+            <div class="d-flex justify-content-between">
+              <h6>Brand</h6>
+              <h6>
+                <%= orders.brand %>
+              </h6>
+            </div>
+            <div class="d-flex justify-content-between">
+              <h6>Picture :</h6>
+              <img src='/images/product/<%= orders.Image %>' alt="" class="bt-0" style="height: 50px; width: 50px;">
+              </td>
+            </div>
+            <div class="d-flex justify-content-between">
               <h6>Payment Status :</h6>
               <h6>
                 <%= orders.orderStatus %>
