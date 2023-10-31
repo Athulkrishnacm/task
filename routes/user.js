@@ -7,12 +7,6 @@ const controller = require('../controllers/userController')
 const userSession = require('../middleware/auth')
 
 
-
-
-
-
-
-
 //-------------------------------------------------------------------------------------------------
 //get 
 router.get('/', controller.home)
@@ -43,12 +37,6 @@ router.get('/orderSuccess', controller.orderSuccess)
 router.get('/error', controller.error)
 
 
-
-
-
-
-
-
 //-------------------------------------------------------------------------------------------------
 //post
 router.post('/signup', controller.signup)
@@ -72,8 +60,6 @@ router.post("/changeData", controller.changeData);
 router.post('/search', controller.search)
 
 // router.post('/deleteCart',controller.deleteCart) 
-
-
 
 
 module.exports = router

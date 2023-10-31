@@ -33,46 +33,43 @@
 
 <body>
     <!-- Topbar Start -->
-    <div class="container-fluid">
-        <div class="row bg-secondary  px-xl-5 row px-xl-5 pt-1 pt-lg-0">
+    <div class="container-fluid bg-primary">
+        <div class="row bg-primary  px-2 row px-xl-5 pt-1 pt-lg-0 ">
 
-            <div class="col-lg-6  text-center text-lg-right ">
+            <div class="col-12 col-lg-6  text-center text-lg-right ">
                 <% if (user) { %>
-                    <div class="d-inline-flex align-items-center d-block d-lg-none">
-
-                        <a href="/wishlist" class="btn px-0 ml-2">
-                            <i class="fas fa-heart text-dark"></i>
-                            <% if(listCount){ %>
-                                <span class="badge text-dark border border-dark rounded-circle"
-                                    style="padding-bottom: 2px;">
-                                    <%= listCount%>
-                                </span>
+                    <div class="d-inline-flex align-items-center justify-content-between d-block d-lg-none">
+                        <div class="d-flex justify-content-between">
+                            <a href="/wishlist" class="btn px-0 ml-2">
+                                <i class="fas fa-heart text-dark"></i>
+                                <% if (listCount) { %>
+                                    <span class="badge text-dark border border-dark rounded-circle" style="padding-bottom: 2px;">
+                                        <%= listCount %>
+                                    </span>
                                 <% } %>
-                        </a>
-
-                        <a href="/cart" class="btn px-0 ml-2">
-                            <i class="fas fa-shopping-cart text-dark"></i>
-                            <% if(cartCount){ %>
-                                <span class="badge text-dark border border-dark rounded-circle" id="cartCount"
-                                    style="padding-bottom: 2px;">
-                                    <%= cartCount%>
-                                </span>
+                            </a>
+                            
+                            <a href="/cart" class="btn px-0 ml-2">
+                                <i class="fas fa-shopping-cart text-dark"></i>
+                                <% if (cartCount) { %>
+                                    <span class="badge text-dark border border-dark rounded-circle" id="cartCount" style="padding-bottom: 2px;">
+                                        <%= cartCount %>
+                                    </span>
                                 <% } %>
-                        </a>
+                            </a>
+                        </div>
+                        
                         <div class="btn-group ml-5">
-                            <button type="button"
-                                class="btn btn-sm rounded-pill btn-light dropdown-toggle text-uppercase"
-                                style="font-weight: bold;" data-toggle="dropdown">
+                            <button type="button" class="btn btn-sm rounded-pill btn-light dropdown-toggle text-uppercase" style="font-weight: bold;" data-toggle="dropdown">
                                 <%= user.userName %> <i class="fa fa-user"></i>
                             </button>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <a href="/profile" class="dropdown-item" type="button">My Profile <i
-                                        class="fa fa-user"></i></a>
-                                <a href="/logout" class="dropdown-item btn btn-danger " type="button">Logout</a>
-
+                                <a href="/profile" class="dropdown-item" type="button">My Profile <i class="fa fa-user"></i></a>
+                                <a href="/logout" class="dropdown-item btn btn-danger" type="button">Logout</a>
                             </div>
                         </div>
                     </div>
+                    
                     <% }else{ %>
                         <div class="d-inline-flex  d-block d-lg-none float-right mt-3 mb-2">
                             <div class="float-right">

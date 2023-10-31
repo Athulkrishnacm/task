@@ -13,14 +13,14 @@ const orderModel = require("../models/orderModel");
 const moment = require('moment');
 const bannerModel = require("../models/bannerModel");
 const brandModel = require("../models/brandModel");
-const readWorkbook = require("../utils/workbook");
+const { stopCronJob } = require("../utils/cronJob");
+const { scheduleJob } = require("../utils/cronJob");
+
 
 module.exports = {
 
     //-------------------------------------------------------------------------------------------------
     // RENDING PAGES
-
-
 
     //login page
     admin: (req, res) => {
@@ -127,7 +127,6 @@ module.exports = {
         const totalproducts = await ProductModel.find()
         res.render('admin/admin-product', { totalproducts, category, size });
         console.log(totalproducts)
-
     },
 
 
@@ -139,20 +138,20 @@ module.exports = {
             console.log(size);
             res.render('admin/admin-addproduct', { category, size })
         }
-
     },
 
 
 
     //add products
     addproduct: async (req, res) => {
-        const { productName, category, size, description, price, } = req.body;
+        const { productName, category, size, description, price, stock } = req.body;
         const image = req.body.images;
         const newProduct = ProductModel({
             productName,
             category,
             size,
             price,
+            stock,
             description,
             Image: image
         });
@@ -292,12 +291,8 @@ module.exports = {
     },
     brand: async (req, res) => {
         try {
-
             const brands = await brandModel.find();
-            const data = await readWorkbook('public/sheets/samsung.xlsx');
-            const models = data.map((row) => row[1])
-            models.shift()
-            res.render('admin/brand', { brands, models });
+            res.render('admin/brand', { brands });
         } catch (error) {
             console.log(error);
         }
@@ -317,8 +312,9 @@ module.exports = {
     addcategory: async (req, res) => {
         try {
             const category = req.body.category
-            const image = req.body.image
-            const newCategory = await categoryModel({ category, Image: image })
+            const Image = req.body.image
+            const sheet = req.body.sheet
+            const newCategory = await categoryModel({ category, Image, sheet })
             await newCategory.save()
             res.redirect('/admin/category')
         } catch (error) {
@@ -355,8 +351,7 @@ module.exports = {
     addbrand: async (req, res) => {
         try {
             const brand = req.body.brand
-            const sheet = req.body.sheet
-            const newBrand = await brandModel({ brand, sheet })
+            const newBrand = await brandModel({ brand })
             await newBrand.save()
             res.redirect('/admin/brand')
         } catch (error) {
@@ -539,22 +534,33 @@ module.exports = {
         }
 
 
+        processDays
         res.render("admin/salesReport", { orders, total, number: req.query.no });
     },
-    processdays: async (req, res) => {
+    settings: async (req, res) => {
         try {
-            const days = await settingsModel.find().select('processDays')
-            res.render('admin/processdays', { days })
+            // const settings = await settingsModel.create({ processDays: 2 })
+            const settings = await settingsModel.findOne()
+            res.render('admin/settings', { days: settings.processDays })
         } catch (error) {
             console.log(error);
         }
     },
     updateProcessDays: async (req, res) => {
         try {
-            const days = await settingsModel.findByIdAndUpdate(req.params.id , { processDays:req.body.days  })
-            res.render('admin/renderdays', { days })
+            const newProcessDays = req.body.days; // Make sure to use the correct parameter name
+            const config = await settingsModel.findOne();
+            config.processDays = newProcessDays; // Update the processDays field
+            await config.save();
+            stopCronJob()
+            const jobScheduled = await scheduleJob()
+            res.json(jobScheduled);
+            // res.redirect('/admin/settings');
         } catch (error) {
-            console.log(error);
+            console.error(error);
+            res.redirect('/admin/settings');
         }
     },
+
+
 };

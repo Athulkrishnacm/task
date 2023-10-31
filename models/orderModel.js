@@ -43,6 +43,9 @@ const oderSchema = new mongoose.Schema({
   orderStatus: {
     type: String,
     trim: true
+  },
+  statusLastUpdate: {
+    type: Date,
 
   },
   orderType: {

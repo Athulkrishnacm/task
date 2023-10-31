@@ -3,58 +3,55 @@
   <div class="col-lg">
     <div class="card">
       <div class="card-body">
-        <div class="card-title"  style="color: #000;">Add Product</div>
+        <h5 class="card-title" style="color: #000;">Add Product</h5>
         <hr>
         <form action="/admin/addproduct" method="post" enctype="multipart/form-data">
-        
-
 
           <div class="form-group">
             <label for="input-4" style="color: #000;">Name</label>
-            <input class="form-control"  id="input-4" type="text"  required name="productName">
+            <input class="form-control" id="input-4" type="text" required name="productName">
           </div>
-
           <div class="form-group">
-            <label for="input-5"  style="color: #000;">Category</label>
-            
-            <select class="group input-group form-control" name="category" id="">
-            <% category.forEach((category)=>{ %>
-              <option >
-                <%= category.category %>
-              </option>
-              <% }) %>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="input-5"  style="color: #000;">Size</label>
-            
-            <select class="group input-group form-control" name="size" id="">
-            <% size.forEach((size)=>{ %>
-              <option >
-                <%= size.size %>
-              </option>
-              <% }) %>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="input-5"  style="color: #000;">Price</label>
-            <input class="form-control" id="input-5" type="tel"  required name="price">
-          </div>
-          
-          <div class="form-group">
-            <label for="input-5"  style="color: #000;">Description</label>
+            <label for="input-5" style="color: #000;">Description</label>
             <input class="form-control" id="input-5" type="tel" required name="description">
           </div>
-          <!-- <div class="form-group">
-            <label for="input-5"  style="color: #000;">Sheet Link</label>
-            <input class="form-control" id="input-5" type="text" required name="sheet">
-          </div> -->
           <div class="form-group">
-            <label for="input-5"  style="color: #000;">Image</label>
-            <input type="file" multiple class="form-control" id="input-5" name="Image"
-              placeholder="Choose an image" />
+            <label for="input-5" style="color: #000;">Category</label>
+
+            <select class="group input-group form-control" name="category" id="">
+              <% category.forEach((category)=>{ %>
+                <option>
+                  <%= category.category %>
+                </option>
+                <% }) %>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="input-5" style="color: #000;">Size</label>
+
+            <select multiple class="group input-group form-control" name="size" id="">
+              <% size.forEach((size)=>{ %>
+                <option value=" <%= size.size %>">
+                  <%= size.size %>
+                </option>
+                <% }) %>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="input-5" style="color: #000;">Price</label>
+            <input class="form-control" id="input-5" type="tel" required name="price">
+          </div>
+
+          <div class="form-group">
+            <label for="input-5" style="color: #000;">Stock</label>
+            <input class="form-control" id="input-5" type="number" required name="stock">
+          </div>
+
+          <div class="form-group">
+            <label for="input-5" style="color: #000;">Images</label>
+            <input type="file" multiple class="form-control" id="input-5" name="Image" placeholder="Choose an image" />
           </div>
 
           <div class="form-group">
@@ -67,3 +64,13 @@
 
 
   <%-include('../admin/layout/admin-footer-layout') -%>
+    <script>
+      document.getElementById("input-4").addEventListener("input", function () {
+        this.value = capitalizeFirstLetter(this.value);
+      });
+
+      function capitalizeFirstLetter(value) {
+        return value.charAt(0).toUpperCase() + value.slice(1);
+      }
+
+    </script>

@@ -14,7 +14,7 @@ const productSchema = new schema(
         
     },
     size:{
-        type:String,
+        type:Array,
         require: true 
     },
     price: {
@@ -25,8 +25,16 @@ const productSchema = new schema(
         type: String,
         required: true,
     },
+    sheet: {
+        type: String,
+        required: true,
+    },
+    stock: {
+        type: String,
+        required: true,
+    },
   
-    Image: {
+    Image: { 
         type: Array,
         
     },

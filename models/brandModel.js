@@ -8,10 +8,6 @@ const brandSchema = new schema({
         required: true,
         unique: true
     },
-    sheet: {
-        type: String,
-        required: true,
-    },
 },
     { timestamps: true }
 )

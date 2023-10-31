@@ -4,15 +4,15 @@
 
     <div class="row">
 
-      <div class="pl-5 pr-5 align-middle col-xl-12">
+      <div class="px-md-5 align-middle col-xl-12">
 
         <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Address</span>
         </h5>
         <div class="form-group">
           <a href="/newAddress" class="btn btn-success float-right px-3 rounded"> Add Address</a>
         </div><br><br>
-        <% userAddress.forEach((x)=> { %>
-          <div class="bg-light p-30 mb-5">
+        <% userAddress.forEach((x)=> { %> 
+          <div class="bg-primary mb-5 ">
             <div class="border-bottom">
 
               <div class="card bg-light ext-white   " style="width: auto; height: auto;">
@@ -20,18 +20,18 @@
 
 
                 </div>
-                <div class="card-body text-left">
+                <div class="card-body text-left p-0 m-0">
                   <table class="table">
                     <h2>Address</h2>
 
                     <tr>
                       <th scope="col">First Name :</th>
                       <th scope="col">
-                        <%= x.firstName %>
+                        <%= x.firstName %> 
                       </th>
                     </tr>
                     <tr>
-                      <th scope="col">Last Name :</th>
+                      <th scope="col">Last Name :</th> 
                       <th scope="col">
                         <%= x.lastName %>
                       </th>
@@ -91,12 +91,8 @@
           </div>
 
           <% }) %>
-
-
       </div>
-
     </div>
-
   </div>
 
 

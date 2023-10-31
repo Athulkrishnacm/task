@@ -1,10 +1,9 @@
-/* eslint-disable-next-line */
 <%-include('../admin/layout/admin-header-layout.ejs') -%>
 
     <div class="col-lg">
         <div class="card">
             <div class="card-body">
-                <div class="card-title">Add Category</div>
+                <h5 class="card-title">Add Category</h5>
                 <hr>
                 <form action="/admin/addcategory" method="post" enctype="multipart/form-data">
 
@@ -14,12 +13,16 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="input-5">Google Sheet Link</label>
+                        <input class="form-control" id="input-5" type="text" required name="sheet">
+                    </div>
+
+                    <div class="form-group">
                         <label for="input-5" style="color: #000;">Category Image</label>
                         <input type="file" class="form-control" id="input-5" name="Image"
                             placeholder="Choose an image" />
                     </div>
 
-                    <!-- <p style="color: red;">Category already exist</p> -->
                     <div class="form-group">
                         <button type="submit" class="btn btn-success px-5"> Add Category</button>
                     </div>
@@ -41,6 +44,7 @@
                                 <th scope="col">#</th>
                                 <th scope="col">Type of Dresses</th>
                                 <th scope="col">Image</th>
+                                <th scope="col">Sheet</th>
                                 <th scope="col">Actions</th>
                             </tr>
                         </thead>
@@ -54,10 +58,12 @@
                                         <%= category.category %>
                                     </td>
                                     <td><img src='/images/category/<%= category.Image %>' alt="" class="bt-0"
-                                            style="height: 50px; width: 50px;"></td>
-
-
-
+                                            style="height: 50px; width: 50px;">
+                                    </td>
+                                    <td>
+                                        <a href="<%= category.sheet %>" target="_blank">Sheet</a>
+                                    </td>
+                                    
                                     <td>
                                         <form action="/admin/deletecategory/<%= category._id %>" method="get">
                                             <button type="submit" class="btn  btn-danger 	fa fa-trash"
@@ -67,9 +73,6 @@
                                             </button>
                                         </form>
                                     </td>
-
-
-
                                 </tr>
                                 <% }) %>
                         </tbody>
@@ -89,8 +92,8 @@
                         <form action="/admin/addsize" method="post">
 
                             <div class="form-group">
-                                <label for="input-4">Sizes</label>
-                                <input class="form-control" id="input-4" type="text" required name="size">
+                                <label for="input-7">Sizes</label>
+                                <input class="form-control" id="input-7" type="text" required name="size">
                             </div>
 
                             <div class="form-group">
@@ -148,3 +151,17 @@
                         </div>
                     </div>
                     <%-include('../admin/layout/admin-footer-layout') -%>
+
+                        <script>
+                            document.getElementById("input-4").addEventListener("input", function () {
+                                this.value = capitalizeFirstLetter(this.value);
+                            });
+                            document.getElementById("input-7").addEventListener("input", function () {
+                                this.value = capitalizeFirstLetter(this.value);
+                            });
+
+                            function capitalizeFirstLetter(value) {
+                                return value.charAt(0).toUpperCase() + value.slice(1);
+                            }
+
+                        </script>

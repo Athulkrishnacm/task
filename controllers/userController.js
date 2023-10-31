@@ -19,6 +19,7 @@ const crypto = require("crypto");
 const { default: mongoose } = require("mongoose");
 const { resolveContent } = require("nodemailer/lib/shared");
 const Razorpay = require("razorpay");
+const readDataFromGoogleSheet = require("../utils/readDatafromGoogleSheet");
 var instance = new Razorpay({
   key_id: "rzp_test_LS04j2FVS1akZj",
   key_secret: "pLcS6cFId3QitNuJzTmbHJde",
@@ -526,7 +527,6 @@ module.exports = {
         var price = parseInt(price);
         var quantity = cartData.products[productIndex].quantity;
         var quantity = parseInt(quantity);
-
         cartData.products[productIndex].quantity -= 1;
         cartData.products[productIndex].total -= price;
         var cart = cartData.cartTotal;
@@ -605,13 +605,22 @@ module.exports = {
     try {
       const allCategory = await categoryModel.find();
       const id = req.params.id;
-      const totalproducts = await ProductModel.findById({ _id: id });
-      // update here
       const brands = await brandModel.find();
-      const data = await readWorkbook('public/sheets/samsung.xlsx');
-      const models = await data.map((row) => row[1])
-      models.shift()
-      // const models = []
+      const product = await ProductModel.findById({});
+      console.log("🚀 ~ file: userController.js:610 ~ productpage: ~ product:", product)
+      let models = []
+      if (product?.sheet) {
+        try {
+          const data = await readDataFromGoogleSheet(product.sheet);
+          if (data && Array.isArray(data) && data.length > 1) {
+            models = data.map((row) => row[0])
+            models.shift()
+          } 
+        } catch (error) {
+          // Handle errors when reading data from the Google Sheet
+          console.error('Error reading data from Google Sheet:', error);
+        }
+      }
       if (req.session.userLogin) {
         const user = req.session.user;
         const userId = user._id;
@@ -631,7 +640,7 @@ module.exports = {
         res.render("user/product-page", {
           brands,
           models,
-          totalproducts,
+          product,
           user,
           cartCount,
           allCategory,
@@ -641,13 +650,14 @@ module.exports = {
         res.render("user/product-page", {
           brands,
           models,
-          totalproducts,
+          product,
           user: false,
           allCategory,
         });
       }
     } catch (error) {
-      res.redirect('/error')
+      console.log("🚀 ~ file: userController.js:653 ~ productpage: ~ error:", error)
+      // res.redirect('/error')
     }
   },
 
@@ -1143,7 +1153,7 @@ module.exports = {
       res.redirect("/profile");
     }
   },
-
+ 
   //-------------------------------------------------------------------------
   // LOG OUT
 

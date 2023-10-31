@@ -35,7 +35,8 @@ router.get('/viewDetails/:id', adminSession.adminSession, controller.viewDetails
 router.get('/saleReport', adminSession.adminSession, controller.saleReport)
 router.get('/delete_coupon', adminSession.adminSession, controller.deleteCoupon)
 router.get('/dash', adminSession.adminSession, controller.dashboard)
-router.get('/processdays', adminSession.adminSession, controller.processdays)
+router.get('/settings', adminSession.adminSession, controller.settings)
+
 // search
 
 // user

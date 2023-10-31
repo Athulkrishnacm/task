@@ -1,20 +1,24 @@
 const mongoose = require('mongoose');
-const schema= mongoose.Schema;
+const schema = mongoose.Schema;
 
 const categorySchema = new schema({
- 
+
     category: {
-        type: String, 
-        required: true, 
-        unique: true  
+        type: String,
+        required: true,
+        unique: true
     },
     Image: {
-        type: String, 
-        required: true, 
+        type: String,
+        required: true,
     },
-}, 
-{timestamps: true}
-) 
-   
-const categoryModel= mongoose.model('CategoryData',categorySchema);
+    sheet: {
+        type: String,
+        required: true,
+    },
+},
+    { timestamps: true }
+)
+
+const categoryModel = mongoose.model('CategoryData', categorySchema);
 module.exports = categoryModel;

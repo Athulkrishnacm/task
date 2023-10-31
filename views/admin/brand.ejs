@@ -13,12 +13,6 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="input-4">Brand sheet</label>
-                        <input class="form-control" id="input-4" type="text" required name="sheet">
-                    </div>
-
-
-                    <div class="form-group">
                         <button type="submit" class="btn btn-success px-5"> Add brand</button>
                     </div>
                 </form>
@@ -40,7 +34,7 @@
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">brand Text</th>
-                                <th scope="col">Available Models</th>
+
                                 <th scope="col">Actions</th>
                             </tr>
                         </thead>
@@ -53,18 +47,9 @@
                                     <td>
                                         <%= brand.brand %>
                                     </td>
-                                   
+
                                     <td>
-                                        <div class="selectOptionBoxisNewDesign">
-                                            <select name="brand" id="brand">
-                                                <% models.forEach((model,index)=> { %>
-                                                    <option class="device--options" value="<%= model %>">
-                                                        <%= model %>
-                                                    </option>
-                                                    <% }) %>
-                                            </select>
-                                        </div>
-                                    <td>
+
                                         <form action="/admin/deletebrand/<%= brand._id %>" method="get">
                                             <button type="submit" class="btn  btn-danger 	fa fa-trash"
                                                 style="width: 75px; height: 30px;"
@@ -84,3 +69,16 @@
 
 
             <%-include('../admin/layout/admin-footer-layout') -%>
+                <script>
+                    document.getElementById("input-4").addEventListener("input", function () {
+                        this.value = capitalizeFirstLetter(this.value);
+                    });
+                    document.getElementById("input-7").addEventListener("input", function () {
+                        this.value = capitalizeFirstLetter(this.value);
+                    });
+
+                    function capitalizeFirstLetter(value) {
+                        return value.charAt(0).toUpperCase() + value.slice(1);
+                    }
+
+                </script>

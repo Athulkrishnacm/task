@@ -94,9 +94,9 @@ const resizeBannerImage = async (req, res, next) => {
   const newFilename = `${file.fieldname}-${Date.now()}-${Math.random()}.jpeg`;
 
   await sharp(file.buffer)
-    .resize(768, 1024)
+    // .resize(768, 1024)
     .toFormat("jpeg")
-    .jpeg({ quality: 90 })
+    .jpeg({ quality: 100 })
     .toFile(`./public/images/banner/${newFilename}`);
   console.log(newFilename);
   req.body.image = newFilename

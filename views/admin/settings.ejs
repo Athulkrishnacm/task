@@ -1,0 +1,23 @@
+<%-include('../admin/layout/admin-header-layout.ejs') -%>
+
+    <div class="col-lg">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Configuration</h5>
+                <hr>
+                <form action="/admin/processdays" method="post">
+
+                    <div class="form-group">
+                        <label for="input-4">Process Days</label>
+                        <h6>current process days: <%= days %>
+                        </h6>
+                        <input class="form-control" id="input-4" type="text" required name="days">
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success px-5">Update Days</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <%-include('../admin/layout/admin-footer-layout') -%>
