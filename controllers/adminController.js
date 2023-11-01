@@ -537,8 +537,8 @@ module.exports = {
     },
     settings: async (req, res) => {
         try {
-            // const settings = await settingsModel.create({ processDays: 2 })
-            const settings = await settingsModel.findOne()
+            //  const settings = await settingsModel.create({ processDays: 2 })
+             const settings = await settingsModel.findOne()
             res.render('admin/settings', { days: settings.processDays })
         } catch (error) {
             console.log(error);

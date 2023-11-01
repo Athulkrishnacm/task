@@ -88,7 +88,7 @@ async function listMajors(auth, spreadsheetId, range) {
 
 async function readDataFromGoogleSheet(spreadsheetUrl) {
     try {
-        const { pathname } = parse(spreadsheetUrl);
+        const { pathname } = parse(spreadsheetUrl   );
         const spreadsheetId = pathname.split('/')[3];
         if (!spreadsheetId) {
             console.error('Invalid Google Sheets URL');
@@ -102,10 +102,15 @@ async function readDataFromGoogleSheet(spreadsheetUrl) {
             console.log('No data found.');
             return;
         }
-        return rows
+         console.log(rows)
+         return rows
+
     } catch (error) {
         console.error('Error reading data:', error);
     }
 }
+
+// readDataFromGoogleSheet()
+
 
 module.exports = readDataFromGoogleSheet
