@@ -118,7 +118,7 @@
           <h5 class="section-title position-relative text-uppercase mb-3  align-items-center mt-2">
             <span class="bg-info pr-3 ">Order Info</span>
           </h5>
-          <div class="bg-light p-30 mb-5">
+          <div class="bg-light p-30 mb-2">
             <div class="d-flex justify-content-between">
               <h6>Order Id :</h6>
               <h6>
@@ -150,16 +150,12 @@
               </h6>
             </div>
             <div class="d-flex justify-content-between">
-              <h6>Brand</h6>
+              <h6>Brand :</h6>
               <h6>
                 <%= orders.brand %>
               </h6>
             </div>
-            <div class="d-flex justify-content-between">
-              <h6>Picture :</h6>
-              <img src='/images/product/<%= orders.Image %>' alt="" class="bt-0" style="height: 50px; width: 50px;">
-              </td>
-            </div>
+
             <div class="d-flex justify-content-between">
               <h6>Payment Status :</h6>
               <h6>
@@ -171,6 +167,12 @@
               <h6>
                 <%= orders.totalProduct %>
               </h6>
+            </div>
+            <div class="d-flex justify-content-center">
+              <h6>Picture :</h6>
+            </div>
+            <div class="d-flex justify-content-center">
+              <img src='/images/product/<%= orders.picture %>' alt="" class="bt-0" style="height: 200px; width: 300px;">
             </div>
           </div>
         </div>

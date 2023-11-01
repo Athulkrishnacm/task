@@ -48,11 +48,7 @@ const oderSchema = new mongoose.Schema({
     type: Date,
 
   },
-  orderType: {
-    type: String,
-    enum: ['order', 'custom'],
-    default: 'order'
-  },
+
   category: {
     type: String,
   },
@@ -61,6 +57,11 @@ const oderSchema = new mongoose.Schema({
   },
   picture: {
     type: String,
+  },
+  orderType: {
+    type: String,
+    enum: ['order', 'custom'],
+    default: 'order'
   },
   customImage: {
     type: String,

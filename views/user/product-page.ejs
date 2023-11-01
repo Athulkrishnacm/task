@@ -61,8 +61,8 @@
 
 
                     <div class="selectOptionBoxisNewDesign mt-2">
-                        <label for="brand">Model:</label>
-                        <select name="brand" id="brand">
+                        <label for="model">Model:</label>
+                        <select name="model" id="model">
                             <% models.forEach((model,index)=> { %>
                                 <option class="device--options" value="<%= model %>">
                                     <%= model %>
@@ -120,5 +120,4 @@
             function capitalizeFirstLetter(value) {
                 return value.charAt(0).toUpperCase() + value.slice(1);
             }
-
         </script>

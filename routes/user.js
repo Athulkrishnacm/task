@@ -35,6 +35,7 @@ router.get('/viewOrder/:id', controller.viewOrder)
 router.get('/cancelOrder/:id', controller.cancelOrder)
 router.get('/orderSuccess', controller.orderSuccess)
 router.get('/error', controller.error)
+router.get('/order/custom/:id', controller.customOrder)
 
 
 //-------------------------------------------------------------------------------------------------

@@ -25,10 +25,6 @@ const productSchema = new schema(
         type: String,
         required: true,
     },
-    sheet: {
-        type: String,
-        required: true,
-    },
     stock: {
         type: String,
         required: true,

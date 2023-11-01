@@ -1,14 +1,17 @@
 function addToCart(id) {
-  
+
+  const brand = $("#brand").val();
+  const model = $("#model").val();
+  console.log("🚀 ~ file: ajax.js:4 ~ addToCart ~ brand:", brand, model)
   $.ajax({
-    url: "/addToCart/" + id,
+    url: `/addToCart/${id}?brand=${brand}&model=${model}`,
     method: "get",
     success: (response) => {
-    
+
       if (response.status) {
 
         let cartCount = $("#cartCount").html()
-        cartCount = parseInt(cartCount) + 1 
+        cartCount = parseInt(cartCount) + 1
         $("#cartCount").html(cartCount)
         Swal.fire({
           position: "center",
@@ -16,10 +19,19 @@ function addToCart(id) {
           title: " Added ",
           customClass: "swal-wide",
           showConfirmButton: true
-      })
+        })
       }
     },
-  }); 
+  });
+}
+function customOrder() {
+  const url = window.location.href;
+  const id  = url.split('/').pop();  
+  console.log("🚀 ~ file: ajax.js:30 ~ customOrder ~ id:", id)
+  $.ajax({
+    url: `/order/custom/${id}`,
+    method: "get",
+  });
 }
 
 function deleteCart(productId, quantity) {

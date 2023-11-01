@@ -437,12 +437,12 @@ module.exports = {
     },
 
     orderlist: async (req, res) => {
-        const orders = await orderModel.find().populate('userId').sort({ createdAt: -1 });
+        const orders = await orderModel.find({ orderType: "order" }).populate('userId').sort({ createdAt: -1 });
 
         res.render('admin/orders', { orders });
     },
     customorderlist: async (req, res) => {
-        const orders = await orderModel.find({}).populate('userId').sort({ createdAt: -1 });
+        const orders = await orderModel.find({ orderType: "custom" }).populate('userId').sort({ createdAt: -1 });
         res.render('admin/customorders', { orders });
     },
 
@@ -486,6 +486,7 @@ module.exports = {
         try {
             const orderId = req.params.id
             const orders = await orderModel.findOne({ _id: orderId }).populate('items.productId');
+            console.log("🚀 ~ file: adminController.js:489 ~ viewDetails: ~ orders:", orders)
             res.render('admin/orderDetail', { orders })
         } catch {
             console.log(error.message);
@@ -532,9 +533,6 @@ module.exports = {
             orders = await orderModel.find()
             total = orders.reduce((acc, cur) => acc + cur.totalAmount, 0);
         }
-
-
-        processDays
         res.render("admin/salesReport", { orders, total, number: req.query.no });
     },
     settings: async (req, res) => {
@@ -554,8 +552,8 @@ module.exports = {
             await config.save();
             stopCronJob()
             const jobScheduled = await scheduleJob()
-            res.json(jobScheduled);
-            // res.redirect('/admin/settings');
+            // res.json(jobScheduled);
+            res.redirect('/admin/settings');
         } catch (error) {
             console.error(error);
             res.redirect('/admin/settings');

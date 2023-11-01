@@ -606,16 +606,16 @@ module.exports = {
       const allCategory = await categoryModel.find();
       const id = req.params.id;
       const brands = await brandModel.find();
-      const product = await ProductModel.findById({});
-      console.log("🚀 ~ file: userController.js:610 ~ productpage: ~ product:", product)
+      const product = await ProductModel.findById(id);
+      const category = await categoryModel.findOne({ category: product.category });
       let models = []
-      if (product?.sheet) {
+      if (category.sheet) {
         try {
-          const data = await readDataFromGoogleSheet(product.sheet);
+          const data = await readDataFromGoogleSheet(category.sheet);
           if (data && Array.isArray(data) && data.length > 1) {
             models = data.map((row) => row[0])
             models.shift()
-          } 
+          }
         } catch (error) {
           // Handle errors when reading data from the Google Sheet
           console.error('Error reading data from Google Sheet:', error);
@@ -647,6 +647,7 @@ module.exports = {
           listCount,
         });
       } else {
+
         res.render("user/product-page", {
           brands,
           models,
@@ -656,7 +657,6 @@ module.exports = {
         });
       }
     } catch (error) {
-      console.log("🚀 ~ file: userController.js:653 ~ productpage: ~ error:", error)
       // res.redirect('/error')
     }
   },
@@ -665,6 +665,8 @@ module.exports = {
     try {
       if (req.session.userLogin) {
         let productId = req.params.id;
+        let brand = req.query.brand;
+        let model = req.query.model;
         let userData = req.session.user;
 
         let userId = userData._id;
@@ -705,7 +707,7 @@ module.exports = {
               .findOneAndUpdate(
                 { userId: userId },
                 {
-                  $push: { products: { productId, total } },
+                  $push: { products: { productId, total, brand, model } },
                   $inc: { cartTotal: total },
                 }
               )
@@ -717,7 +719,7 @@ module.exports = {
         } else {
           const cartProduct = new cartModel({
             userId,
-            products: [{ productId, total }],
+            products: [{ productId, total, brand, model }],
             cartTotal: total,
           });
           await cartProduct
@@ -948,7 +950,6 @@ module.exports = {
   },
 
   userOrdering: async (req, res) => {
-    //  console.log(req.body);
     const userId = req.body.userId;
     const addressId = req.body.address;
     const Ids = addressId.trim();
@@ -957,7 +958,10 @@ module.exports = {
     let cartProducts = await cartModel
       .findOne({ userId: userId })
       .populate("products.productId");
+
     const product = cartProducts.products;
+    const productOne = product[0].productId
+
     let count = cartProducts.products.length;
 
     let Total = cartProducts.cartTotal;
@@ -977,14 +981,69 @@ module.exports = {
       paymentMethod: req.body.payment,
       totalProduct: count,
       totalAmount: Total,
-      categoryName: req.body.category,
-      brand: req.body.category,
-      picture: req.body.picture,
-      orderType: req.body.orderType,
+      // 
+      category: productOne.category,
+      brand: productOne.brand,
+      picture: productOne.Image[0],
+      orderType: 'order',
       customImage: req.body.customImage,
       orderStatus: "Placed",
     };
+    const orderId = await orderModel.create(userOrder);
+    if (req.body.payment == "COD") {
+      await cartModel.deleteOne({ userId: userId });
+      res.json({ codSuccess: true });
+    } else {
+      var options = {
+        amount: Total * 100, // amount in the smallest currency unit
+        currency: "INR",
+        receipt: "" + orderId._id,
+      };
+      instance.orders.create(options, function (err, order) {
+        res.json({ order, userOrder, User });
+      });
+    }
+  },
+  customOrdering: async (req, res) => {
+    const userId = req.body.userId;
+    const addressId = req.body.address;
+    const Ids = addressId.trim();
+    let address = await addressModel.findOne({ _id: Ids });
+    const User = await UserModel.findById(userId);
+    let cartProducts = await cartModel
+      .findOne({ userId: userId })
+      .populate("products.productId");
 
+    const product = cartProducts.products;
+    const productOne = product[0].productId
+
+    let count = cartProducts.products.length;
+
+    let Total = cartProducts.cartTotal;
+    const userOrder = {
+      Address: {
+        firstName: address.firstName,
+        lastName: address.lastName,
+        mobileNo: address.mobNumber,
+        address: address.homeaddress,
+        email: address.email,
+        city: address.city,
+        state: address.state,
+        country: address.country,
+      },
+      userId: userId,
+      items: product,
+      paymentMethod: req.body.payment,
+      totalProduct: count,
+      totalAmount: Total,
+      // 
+      category: productOne.category,
+      brand: productOne.brand,
+      picture: productOne.Image[0],
+      orderType: 'order',
+      customImage: req.body.customImage,
+      orderStatus: "Placed",
+    };
     const orderId = await orderModel.create(userOrder);
     if (req.body.payment == "COD") {
       await cartModel.deleteOne({ userId: userId });
@@ -1016,7 +1075,7 @@ module.exports = {
       let hmac = crypto
         .createHmac("sha256", "pLcS6cFId3QitNuJzTmbHJde")
         .update(
-          data["payment[razorpay_order_id]"] +
+          data["payment[razorpay_order_idtd]"] +
           "|" +
           data["payment[razorpay_payment_id]"]
         )
@@ -1153,7 +1212,7 @@ module.exports = {
       res.redirect("/profile");
     }
   },
- 
+
   //-------------------------------------------------------------------------
   // LOG OUT
 
@@ -1401,6 +1460,69 @@ module.exports = {
       res.redirect('/error');
     }
 
+  },
+  // customOrder: async (req, res) => {
+  //   const 
+  //   res.render("user/newCustomOrder");
+
+  // },
+  customOrder: async (req, res) => {
+    try {
+      const allCategory = await categoryModel.find();
+      const id = req.params.id;
+      const brands = await brandModel.find();
+      const product = await ProductModel.findById(id);
+      const category = await categoryModel.findOne({ category: product.category });
+      let models = []
+      if (category.sheet) {
+        try {
+          const data = await readDataFromGoogleSheet(category.sheet);
+          if (data && Array.isArray(data) && data.length > 1) {
+            models = data.map((row) => row[0])
+            models.shift()
+          }
+        } catch (error) {
+          // Handle errors when reading data from the Google Sheet
+          console.error('Error reading data from Google Sheet:', error);
+        }
+      }
+      if (req.session.userLogin) {
+        const user = req.session.user;
+        const userId = user._id;
+        const userCart = await cartModel.findOne({ userId: userId });
+        const userList = await wishlistModel.findOne({ userId: userId });
+
+        if (userCart) {
+          var cartCount = userCart.products.length;
+        } else {
+          var cartCount = 0;
+        }
+        if (userList) {
+          var listCount = userList.productId.length;
+        } else {
+          var listCount = 0;
+        }
+        res.render("user/customOrder", {
+          brands,
+          models,
+          product,
+          user,
+          cartCount,
+          allCategory,
+          listCount,
+        });
+      } else {
+        res.render("user/customOrder", {
+          brands,
+          models,
+          product,
+          user: false,
+          allCategory,
+        });
+      }
+    } catch (error) {
+      // res.redirect('/error')
+    }
   },
 
 
