@@ -20,6 +20,7 @@ const { default: mongoose } = require("mongoose");
 const { resolveContent } = require("nodemailer/lib/shared");
 const Razorpay = require("razorpay");
 const readDataFromGoogleSheet = require("../utils/readDatafromGoogleSheet");
+const { log } = require("util");
 var instance = new Razorpay({
   key_id: "rzp_test_LS04j2FVS1akZj",
   key_secret: "pLcS6cFId3QitNuJzTmbHJde",
@@ -396,15 +397,18 @@ module.exports = {
 
   cart: async (req, res) => {
     try {
+      
       if (req.session.userLogin) {
+       
         const user = req.session.user;
         const userId = user._id;
-
+        
         const list = await cartModel
+        
           .findOne({ userId: userId })
           .populate("products.productId")
           .sort({ products: -1 });
-
+        console.log(list)
         const allCategory = await categoryModel.find();
         const userCart = await cartModel.findOne({ userId: userId });
         const userList = await wishlistModel.findOne({ userId: userId });
@@ -422,6 +426,7 @@ module.exports = {
             var listCount = 0;
           }
           const cartProducts = list.products;
+         
           const cartId = list._id;
           if (cartCount == 0) {
             await cartModel.findOneAndRemove({ userId: userId })
@@ -672,6 +677,7 @@ module.exports = {
         let userId = userData._id;
 
         let product = await ProductModel.findOne({ _id: productId });
+        console.log(product);
         let total = product.price;
 
         let cartExist = await cartModel.findOne({ userId: userId });
